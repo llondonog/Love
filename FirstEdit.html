@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Me Encantas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button class="btn-back-arrow" id="btn-volver" style="display: none;">←</button>
+    
+    <div class="container">
+        <div class="content" id="content-inicial">
+            <h1 class="greeting">Hola mi bonito 💖</h1>
+            <button class="btn-view" id="btn-ver" style="display: none;">Guenas</button>
+        </div>
+        
+        <div class="content" id="content-segundo" style="display: none;">
+            <h1 class="greeting">Hoy quiero decirte algo importante...</h1>
+            <button class="btn-view" id="btn-vermas" style="display: none;">¿Qué cosa?</button>
+        </div>
+        
+        <div class="content" id="content-tercero" style="display: none;">
+            <h1 class="greeting">No importa cuán difícil se nos ponga la vida</h1>
+        </div>
+
+        <div class="content" id="content-cuarto" style="display: none;">
+            <h1 class="greeting">En mí vas a encontrar un amor puro y sin condiciones</h1>
+        </div>
+
+        <div class="content" id="content-quinto" style="display: none;">
+            <h1 class="greeting">Voy a ser tu luz en los momentos más oscuros de tu vida</h1>
+        </div>
+
+        <div class="content" id="content-sexto" style="display: none;">
+            <h1 class="greeting">Tal vez no siempre voy a tener una solución</h1>
+        </div>
+
+        <div class="content" id="content-septimo" style="display: none;">
+            <h1 class="greeting">Pero voy a ser el hombro en el que descargues todas tus frustraciones</h1>
+        </div>
+
+        <div class="content" id="content-octavo" style="display: none;">
+            <h1 class="greeting">Voy a ser ese botón de reinicio que haga que aguantes un poquito más</h1>
+        </div>
+
+        <div class="content" id="content-noveno" style="display: none;">
+            <h1 class="greeting">Y por nada del mundo voy a dejar que las circunstancias me alejen de tu lado</h1>
+        </div>
+
+        <div class="content" id="content-decimo" style="display: none;">
+            <h1 class="greeting">Te super adoro mi amor bonito 💖</h1>
+            <h6>Att: Tu metro veinte</h6>
+            <h6>Att: Necesitamos ponerle fecha a nuestro aniversario bebé</h6>
+            <h6>Att: Ten un lindo día mi vida</h6>
+            <button class="btn-reset" id="btn-reset" style="display: none;">🔄 ↻ Botón de Reinicio ↺ 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        const btnVer = document.getElementById('btn-ver');
+        const btnVermas = document.getElementById('btn-vermas');
+        const btnVolver = document.getElementById('btn-volver');
+        const btnReset = document.getElementById('btn-reset');
+        const contentInicial = document.getElementById('content-inicial');
+        const contentSegundo = document.getElementById('content-segundo');
+        const contentPantallas = [
+            document.getElementById('content-tercero'),
+            document.getElementById('content-cuarto'),
+            document.getElementById('content-quinto'),
+            document.getElementById('content-sexto'),
+            document.getElementById('content-septimo'),
+            document.getElementById('content-octavo'),
+            document.getElementById('content-noveno'),
+            document.getElementById('content-decimo')
+        ];
+        
+        let historialPaginas = ['inicial'];
+        let indicePantalla = 0;
+        let intervaloAnimacion = null;
+        let enTransicion = false;
+
+        function ocultarTodasLasPantallasConFade() {
+            return new Promise((resolve) => {
+                contentInicial.classList.add('fade-out');
+                contentSegundo.classList.add('fade-out');
+                contentPantallas.forEach(pantalla => pantalla.classList.add('fade-out'));
+                
+                setTimeout(() => {
+                    contentInicial.style.display = 'none';
+                    contentSegundo.style.display = 'none';
+                    contentPantallas.forEach(pantalla => pantalla.style.display = 'none');
+                    
+                    contentInicial.classList.remove('fade-out');
+                    contentSegundo.classList.remove('fade-out');
+                    contentPantallas.forEach(pantalla => pantalla.classList.remove('fade-out'));
+                    
+                    resolve();
+                }, 1500);
+            });
+        }
+
+        function mostrarPantallaConFade(indice) {
+            return new Promise((resolve) => {
+                contentInicial.classList.add('fade-out');
+                contentSegundo.classList.add('fade-out');
+                contentPantallas.forEach(pantalla => pantalla.classList.add('fade-out'));
+                
+                setTimeout(() => {
+                    contentInicial.style.display = 'none';
+                    contentSegundo.style.display = 'none';
+                    contentPantallas.forEach(pantalla => pantalla.style.display = 'none');
+                    
+                    if (indice < contentPantallas.length) {
+                        contentPantallas[indice].style.display = 'block';
+                        contentPantallas[indice].classList.add('fade-in');
+                    }
+                    
+                    contentInicial.classList.remove('fade-out');
+                    contentSegundo.classList.remove('fade-out');
+                    contentPantallas.forEach(pantalla => pantalla.classList.remove('fade-out'));
+                    contentPantallas.forEach(pantalla => pantalla.classList.remove('fade-in'));
+                    
+                    setTimeout(() => resolve(), 1500);
+                }, 1500);
+            });
+        }
+
+        function mostrarPantalla(indice) {
+            contentInicial.classList.add('fade-out');
+            contentSegundo.classList.add('fade-out');
+            contentPantallas.forEach(pantalla => pantalla.classList.add('fade-out'));
+            
+            setTimeout(() => {
+                contentInicial.style.display = 'none';
+                contentSegundo.style.display = 'none';
+                contentPantallas.forEach(pantalla => pantalla.style.display = 'none');
+                
+                if (indice < contentPantallas.length) {
+                    contentPantallas[indice].style.display = 'block';
+                    contentPantallas[indice].classList.add('fade-in');
+                    
+                    // Si es el último div, mostrar el botón después de 2.2s
+                    if (indice === contentPantallas.length - 1) {
+                        setTimeout(() => {
+                            btnReset.style.display = 'block';
+                        }, 2200);
+                    }
+                }
+                
+                contentInicial.classList.remove('fade-out');
+                contentSegundo.classList.remove('fade-out');
+                contentPantallas.forEach(pantalla => pantalla.classList.remove('fade-out'));
+                
+                setTimeout(() => {
+                    contentPantallas.forEach(pantalla => pantalla.classList.remove('fade-in'));
+                }, 1500);
+            }, 1500);
+        }
+
+        function iniciarAnimacion() {
+            indicePantalla = 0;
+            contentInicial.style.display = 'none';
+            contentSegundo.style.display = 'none';
+            contentPantallas.forEach(p => p.style.display = 'none');
+            contentPantallas[0].style.display = 'block';
+            
+            intervaloAnimacion = setInterval(() => {
+                indicePantalla++;
+                if (indicePantalla < contentPantallas.length) {
+                    mostrarPantalla(indicePantalla);
+                } else {
+                    clearInterval(intervaloAnimacion);
+                }
+            }, 4500);
+            
+            // Mostrar el botón en el último div después de esperar todo el tiempo
+            const tiempoHastaUltimo = (contentPantallas.length - 1) * 4500 + 2200;
+            setTimeout(() => {
+                if (indicePantalla === contentPantallas.length - 1) {
+                    btnReset.style.display = 'block';
+                }
+            }, tiempoHastaUltimo);
+        }
+
+        btnVer.addEventListener('click', () => {
+            contentInicial.style.display = 'none';
+            contentSegundo.style.display = 'block';
+            btnVolver.style.display = 'block';
+            historialPaginas.push('segundo');
+            
+            setTimeout(() => {
+                btnVermas.style.display = 'block';
+            }, 2200);
+        });
+
+        btnVermas.addEventListener('click', () => {
+            contentSegundo.style.display = 'none';
+            btnVolver.style.display = 'block';
+            historialPaginas.push('animacion');
+            iniciarAnimacion();
+        });
+
+        btnReset.addEventListener('click', () => {
+            if (intervaloAnimacion) {
+                clearInterval(intervaloAnimacion);
+            }
+            
+            contentInicial.style.display = 'none';
+            contentSegundo.style.display = 'none';
+            contentPantallas.forEach(p => p.style.display = 'none');
+            
+            contentInicial.style.display = 'block';
+            btnVolver.style.display = 'none';
+            historialPaginas = ['inicial'];
+        });
+
+        btnVolver.addEventListener('click', async () => {
+            if (intervaloAnimacion) {
+                clearInterval(intervaloAnimacion);
+            }
+            
+            const paginaActual = historialPaginas[historialPaginas.length - 1];
+            let elementoActual = contentInicial;
+            
+            if (paginaActual === 'segundo') elementoActual = contentSegundo;
+            else if (paginaActual === 'animacion') elementoActual = contentPantallas[indicePantalla];
+            
+            elementoActual.classList.add('fade-out');
+            
+            setTimeout(() => {
+                contentInicial.style.display = 'none';
+                contentSegundo.style.display = 'none';
+                contentPantallas.forEach(p => p.style.display = 'none');
+                btnVermas.style.display = 'none';
+                btnReset.style.display = 'none';
+                
+                historialPaginas.pop();
+                const paginaAnterior = historialPaginas[historialPaginas.length - 1];
+                
+                if (paginaAnterior === 'inicial') {
+                    contentInicial.style.display = 'block';
+                    contentInicial.classList.add('fade-in');
+                    btnVolver.style.display = 'none';
+                    
+                    setTimeout(() => {
+                        btnVer.style.display = 'block';
+                    }, 2200);
+                } else if (paginaAnterior === 'segundo') {
+                    contentSegundo.style.display = 'block';
+                    contentSegundo.classList.add('fade-in');
+                    
+                    setTimeout(() => {
+                        btnVermas.style.display = 'block';
+                    }, 2200);
+                } else if (paginaAnterior === 'animacion') {
+                    contentPantallas[indicePantalla].style.display = 'block';
+                    contentPantallas[indicePantalla].classList.add('fade-in');
+                    iniciarAnimacion();
+                }
+                
+                elementoActual.classList.remove('fade-out');
+                
+                setTimeout(() => {
+                    contentInicial.classList.remove('fade-in');
+                    contentSegundo.classList.remove('fade-in');
+                    contentPantallas.forEach(p => p.classList.remove('fade-in'));
+                }, 1500);
+            }, 1500);
+        });
+
+        // Mostrar el botón Ver después de que termine la animación del primer greeting
+        setTimeout(() => {
+            btnVer.style.display = 'block';
+        }, 2200);
+    </script>
+</body>
+</html>
